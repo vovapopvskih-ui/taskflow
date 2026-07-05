@@ -1,0 +1,51 @@
+import { type ReactNode } from "react";
+import { cn } from "@/lib/utils";
+
+interface DashboardCardProps {
+  icon: ReactNode;
+  title: string;
+  value: string | number;
+  hint?: string;
+}
+
+export function DashboardCard({
+  icon,
+  title,
+  value,
+  hint,
+}: DashboardCardProps) {
+  return (
+    <div className="rounded-lg border border-border bg-card p-4">
+      <div className="flex items-center gap-2 text-muted-foreground">
+        {icon}
+        <span className="text-xs font-medium">{title}</span>
+      </div>
+      <p className="mt-2 text-sm font-medium text-foreground break-words">
+        {value}
+      </p>
+      {hint && (
+        <p className="mt-1 text-xs text-muted-foreground">{hint}</p>
+      )}
+    </div>
+  );
+}
+
+interface DashboardStatsProps {
+  icon: ReactNode;
+  label: string;
+  value: number;
+}
+
+export function DashboardStats({ icon, label, value }: DashboardStatsProps) {
+  return (
+    <div className="rounded-lg border border-border bg-card p-5">
+      <div className="flex items-center gap-2 text-muted-foreground">
+        {icon}
+        <span className="text-xs font-medium">{label}</span>
+      </div>
+      <p className="mt-3 text-3xl font-semibold text-foreground tabular-nums">
+        {value}
+      </p>
+    </div>
+  );
+}

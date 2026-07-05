@@ -1,0 +1,27 @@
+# ============================================================
+# TaskFlow — Docker Compose
+# ============================================================
+# Запуск:  docker-compose up -d --build
+# Остановка: docker-compose down
+# Логи:    docker-compose logs -f
+# ============================================================
+
+services:
+  taskflow:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: taskflow-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_SUPABASE_URL=${NEXT_PUBLIC_SUPABASE_URL}
+      - NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=${NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s

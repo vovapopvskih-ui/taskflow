@@ -1,0 +1,334 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * ============================================================
+ * DESIGN TOKENS — TaskFlow
+ * Стиль: Liquid Glass / iOS 26
+ * ============================================================
+ * Принципы:
+ * - Полупрозрачные поверхности с размытием фона (backdrop-filter)
+ * - Мягкие свечения и подсветки краёв (highlight rim)
+ * - Глубокие закругления
+ * - Многослойность и глубина через прозрачность
+ * - Плавные переходы
+ * ============================================================
+ */
+
+:root {
+  /* Базовые — с лёгким градиентным оттенком */
+  --background: #f5f5f7;
+  --foreground: #1d1d1f;
+
+  /* Карточки — полупрозрачные "стеклянные" */
+  --card: 255 255 255; /* RGB для rgba */
+  --card-opacity: 0.72;
+  --card-foreground: #1d1d1f;
+
+  /* Попапы — более непрозрачные для читаемости */
+  --popover: 255 255 255;
+  --popover-opacity: 0.85;
+  --popover-foreground: #1d1d1f;
+
+  /* Основной акцент — синий Apple */
+  --primary: #0a84ff;
+  --primary-foreground: #ffffff;
+
+  /* Второстепенный */
+  --secondary: 118 118 128;
+  --secondary-foreground: #1d1d1f;
+
+  /* Приглушённый */
+  --muted: 118 118 128;
+  --muted-foreground: #86868b;
+
+  /* Акцент */
+  --accent: 0 122 255;
+  --accent-foreground: #ffffff;
+
+  /* Деструктивный */
+  --destructive: #ff3b30;
+  --destructive-foreground: #ffffff;
+
+  /* Бордеры — полупрозрачные */
+  --border: 0 0 0;
+  --border-opacity: 0.08;
+  --input: 0 0 0;
+  --input-opacity: 0.1;
+  --ring: #0a84ff;
+
+  /* Радиусы — глубокие, iOS-style */
+  --radius: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* Размытие */
+  --blur: 20px;
+  --blur-strong: 40px;
+
+  /* Статусы */
+  --status-new: #ff9f0a;
+  --status-progress: #0a84ff;
+  --status-done: #30d158;
+
+  /* Приоритеты */
+  --priority-low: #8e8e93;
+  --priority-medium: #ff9f0a;
+  --priority-high: #ff3b30;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #f5f5f7;
+
+  --card: 28 28 30;
+  --card-opacity: 0.6;
+  --card-foreground: #f5f5f7;
+
+  --popover: 28 28 30;
+  --popover-opacity: 0.85;
+  --popover-foreground: #f5f5f7;
+
+  --primary: #0a84ff;
+  --primary-foreground: #ffffff;
+
+  --secondary: 118 118 128;
+  --secondary-foreground: #f5f5f7;
+
+  --muted: 118 118 128;
+  --muted-foreground: #98989d;
+
+  --accent: 10 132 255;
+  --accent-foreground: #ffffff;
+
+  --destructive: #ff453a;
+  --destructive-foreground: #ffffff;
+
+  --border: 255 255 255;
+  --border-opacity: 0.12;
+  --input: 255 255 255;
+  --input-opacity: 0.15;
+  --ring: #0a84ff;
+
+  --status-new: #ff9f0a;
+  --status-progress: #0a84ff;
+  --status-done: #30d158;
+
+  --priority-low: #8e8e93;
+  --priority-medium: #ff9f0a;
+  --priority-high: #ff453a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: rgb(var(--card));
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: rgb(var(--popover));
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: rgb(var(--secondary));
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: rgb(var(--muted));
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: rgb(var(--accent));
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: rgb(var(--border));
+  --color-input: rgb(var(--input));
+  --color-ring: var(--ring);
+  --color-status-new: var(--status-new);
+  --color-status-progress: var(--status-progress);
+  --color-status-done: var(--status-done);
+  --color-priority-low: var(--priority-low);
+  --color-priority-medium: var(--priority-medium);
+  --color-priority-high: var(--priority-high);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/*
+ * ============================================================
+ * БАЗОВЫЕ СТИЛИ + LIQUID GLASS УТИЛИТЫ
+ * ============================================================
+ */
+
+* {
+  border-color: rgb(var(--border) / var(--border-opacity));
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Decorative animated background blobs — создают глубину для стекла */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(10, 132, 255, 0.12), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(94, 92, 230, 0.10), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 159, 10, 0.06), transparent 50%);
+  pointer-events: none;
+}
+
+.dark body::before {
+  background:
+    radial-gradient(circle at 15% 20%, rgba(10, 132, 255, 0.18), transparent 40%),
+    radial-gradient(circle at 85% 80%, rgba(94, 92, 230, 0.15), transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(48, 209, 88, 0.05), transparent 50%);
+}
+
+/*
+ * GLASS SURFACE — главный класс эффекта жидкого стекла.
+ * Полупрозрачность + backdrop-blur + highlight rim.
+ * Обёрнуто в @layer components чтобы Tailwind не вырезал.
+ */
+@layer components {
+  .glass {
+    background: rgb(var(--card) / var(--card-opacity));
+    backdrop-filter: blur(var(--blur)) saturate(180%);
+    -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+    border: 1px solid rgb(var(--border) / var(--border-opacity));
+    box-shadow:
+      inset 0 1px 1px 0 rgb(255 255 255 / 0.5),
+      0 8px 32px 0 rgb(0 0 0 / 0.06);
+  }
+
+  .dark .glass {
+    box-shadow:
+      inset 0 1px 1px 0 rgb(255 255 255 / 0.08),
+      0 8px 32px 0 rgb(0 0 0 / 0.4);
+  }
+
+  .glass-strong {
+    background: rgb(var(--popover) / var(--popover-opacity));
+    backdrop-filter: blur(var(--blur-strong)) saturate(200%);
+    -webkit-backdrop-filter: blur(var(--blur-strong)) saturate(200%);
+    border: 1px solid rgb(var(--border) / var(--border-opacity));
+    box-shadow:
+      inset 0 1px 1px 0 rgb(255 255 255 / 0.5),
+      0 20px 60px 0 rgb(0 0 0 / 0.15);
+  }
+
+  .dark .glass-strong {
+    box-shadow:
+      inset 0 1px 1px 0 rgb(255 255 255 / 0.1),
+      0 20px 60px 0 rgb(0 0 0 / 0.6);
+  }
+}
+
+/*
+ * color-scheme — нативные элементы под тему
+ */
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+select option {
+  background: rgb(var(--card) / 0.95);
+  color: var(--card-foreground);
+}
+
+/*
+ * SELECT — стеклянная кнопка вместо системного вида.
+ * Контейнер с glass-эффектом, option выпадают с прозрачностью.
+ */
+.glass-select {
+  background: rgb(var(--card) / var(--card-opacity)) !important;
+  backdrop-filter: blur(var(--blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+  border: 1px solid rgb(var(--border) / var(--border-opacity)) !important;
+  border-radius: var(--radius) !important;
+  box-shadow:
+    inset 0 1px 1px 0 rgb(255 255 255 / 0.5),
+    0 2px 8px 0 rgb(0 0 0 / 0.04);
+  color: var(--foreground) !important;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.dark .glass-select {
+  box-shadow:
+    inset 0 1px 1px 0 rgb(255 255 255 / 0.08),
+    0 2px 8px 0 rgb(0 0 0 / 0.3);
+}
+
+.glass-select option {
+  background: rgb(var(--card) / 0.98);
+  color: var(--card-foreground);
+  padding: 8px;
+}
+
+.glass-select:hover {
+  border-color: rgb(var(--accent) / 0.4) !important;
+}
+
+/*
+ * ТОСТЫ — стеклянные
+ */
+[data-sonner-toaster] {
+  --normal-bg: rgb(var(--card) / var(--card-opacity));
+  --normal-text: var(--foreground);
+  --normal-border: rgb(var(--border) / var(--border-opacity));
+}
+
+[data-sonner-toaster] [data-sonner-toast] {
+  backdrop-filter: blur(var(--blur)) saturate(180%);
+  -webkit-backdrop-filter: blur(var(--blur)) saturate(180%);
+}
+
+/*
+ * ФОКУС — мягкое свечение
+ */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/*
+ * СКРОЛЛБАР — тонкий, полупрозрачный
+ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(var(--border) / 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgb(var(--border) / 0.5);
+}
+
+/*
+ * ПЛАВНЫЕ ПЕРЕХОДЫ — для всех интерактивных элементов
+ */
+button,
+a,
+input,
+select,
+textarea {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}

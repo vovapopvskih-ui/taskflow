@@ -1,0 +1,204 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * DESIGN TOKENS — TaskFlow
+ *
+ * Философия: приглушённая, спокойная палитра.
+ * Никаких свечений, неона, глассморфизма.
+ * Тонкие границы, умеренные скругления, плотный интерфейс.
+ */
+
+:root {
+  /* Базовые */
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+
+  /* Карточки / панели */
+  --card: #ffffff;
+  --card-foreground: #1a1a1a;
+
+  /* Попапы */
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1a;
+
+  /* Основной акцент (чистый синий — как Linear/Vercel) */
+  --primary: #2563eb;
+  --primary-foreground: #ffffff;
+
+  /* Второстепенный */
+  --secondary: #f3f4f6;
+  --secondary-foreground: #374151;
+
+  /* Приглушённый / фоновый */
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+
+  /* Акцент (для ссылок,亮点) */
+  --accent: #f3f4f6;
+  --accent-foreground: #1a1a1a;
+
+  /* Деструктивный (ошибки, удаление) */
+  --destructive: #dc2626;
+  --destructive-foreground: #ffffff;
+
+  /* Бордеры — тонкие, приглушённые */
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #2563eb;
+
+  /* Радиусы скругления — умеренные */
+  --radius: 0.5rem;
+
+  /* Статусы задач */
+  --status-new: #f59e0b;
+  --status-progress: #3b82f6;
+  --status-done: #22c55e;
+
+  /* Приоритеты */
+  --priority-low: #6b7280;
+  --priority-medium: #f59e0b;
+  --priority-high: #ef4444;
+}
+
+.dark {
+  --background: #111111;
+  --foreground: #e5e7eb;
+
+  --card: #1a1a1a;
+  --card-foreground: #e5e7eb;
+
+  --popover: #1a1a1a;
+  --popover-foreground: #e5e7eb;
+
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+
+  --secondary: #262626;
+  --secondary-foreground: #d1d5db;
+
+  --muted: #262626;
+  --muted-foreground: #9ca3af;
+
+  --accent: #262626;
+  --accent-foreground: #e5e7eb;
+
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  --border: #2d2d2d;
+  --input: #2d2d2d;
+  --ring: #3b82f6;
+
+  --status-new: #f59e0b;
+  --status-progress: #60a5fa;
+  --status-done: #4ade80;
+
+  --priority-low: #9ca3af;
+  --priority-medium: #f59e0b;
+  --priority-high: #ef4444;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-status-new: var(--status-new);
+  --color-status-progress: var(--status-progress);
+  --color-status-done: var(--status-done);
+  --color-priority-low: var(--priority-low);
+  --color-priority-medium: var(--priority-medium);
+  --color-priority-high: var(--priority-high);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+/*
+ * BASE STYLES
+ */
+* {
+  border-color: var(--border);
+}
+
+/* color-scheme — говорит браузеру рисовать нативные элементы (select, option,
+   scrollbar, date-picker) под выбранную тему. Без этого выпадающие списки
+   остаются белыми даже в тёмной теме. */
+:root {
+  color-scheme: light;
+}
+.dark {
+  color-scheme: dark;
+}
+
+/*
+ * Select и его option — принудительно используем цвета токенов.
+ */
+select option {
+  background: var(--card);
+  color: var(--card-foreground);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+}
+
+/*
+ * СТИЛИ ДЛЯ ТОСТОВ — без свечения
+ */
+[data-sonner-toaster] {
+  --normal-bg: var(--card);
+  --normal-text: var(--foreground);
+  --normal-border: var(--border);
+}
+
+/*
+ * ФОКУС — тонкое кольцо, без свечения
+ */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+/*
+ * СКРОЛЛБАР — тонкий, приглушённый
+ */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--muted-foreground);
+}
